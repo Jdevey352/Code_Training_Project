@@ -1,43 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+using UnityEngine;
+using UnityEngine.InputSystem; //Don't miss this!
+
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
-    private Rigidbody2D _rb;
-
-
-    void Awake()
-    {
-        _rb = GetComponent<Rigidbody2D>();
-        
-    }
+    private PlayerInput _input; //field to reference Player Input component
+    private Rigidbody2D _rigidbody;
 
     // Start is called before the first frame update
     void Start()
     {
-        /*transform.position = (Vector3)new Vector2(2, 1);
-        Invoke(nameof(AcceptDefeat), 300);*/
-    }
+        //set reference to PlayerInput component on this object
+        //Top Action Map, "Player" should be active by default
+        _input = GetComponent<PlayerInput>();
+        //You can switch Action Maps using _input.SwitchCurrentActionMap("UI");
 
-    void FixedUpdate()
-    {
-        float xAxis = Input.GetAxis("Horizontal");
-        float yAxis = Input.GetAxis("Vertical");
-        
-        _rb.velocity = new Vector2(xAxis * speed, yAxis * speed);
-    }
+        //set reference to Rigidbody2D component on this object
+        _rigidbody = GetComponent<Rigidbody2D>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //transform.position = new Vector2(3, -1);
+        //Invoke(nameof(AcceptDefeat), 10);
     }
 
     void AcceptDefeat()
     {
         Destroy(gameObject);
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //if Fire action was performed log it to the console
+        if (_input.actions["Fire"].WasPressedThisFrame())
+        {
+            Debug.Log("Fire activated!");
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        //set direction to the Move action's Vector2 value
+        var dir = _input.actions["Move"].ReadValue<Vector2>();
+
+        //change the velocity to match the Move (every physics update)
+        _rigidbody.velocity = dir * 5;
+    }
 }
+
