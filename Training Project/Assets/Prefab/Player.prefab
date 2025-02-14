@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7899598194325743711}
   - component: {fileID: 5845656787970118940}
   - component: {fileID: 6962094104409053039}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,4 +161,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc42990d3cff57647a35700c69dd0fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  ballPrefab: {fileID: 0}
