@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.State != GameState.Playing) return;
+
         if (_input.actions["Fire"].WasPressedThisFrame())
         {
             //create a new object that is a clone of the ballPrefab
@@ -55,6 +57,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.State != GameState.Playing) return;
+
         //set direction to the Move action's Vector2 value
         var dir = _input.actions["Move"].ReadValue<Vector2>();
 

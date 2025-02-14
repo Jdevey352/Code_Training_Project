@@ -20,7 +20,14 @@ public class EnemyController : MonoBehaviour
     {
         //keep resetting the velocity to the
         //direction * speed even if nudged
-        _rigidbody.velocity = _direction * 2;
+        if (GameManager.Instance.State == GameState.Playing)
+        {
+            _rigidbody.velocity = _direction * 2;
+        }
+        else
+        {
+            _rigidbody.velocity = Vector2.zero;
+        }
     }
 
     //IEnumerator return type for coroutine
