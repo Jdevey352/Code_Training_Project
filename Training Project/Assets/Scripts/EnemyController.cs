@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -41,6 +42,25 @@ public class EnemyController : MonoBehaviour
             yield return new WaitForSeconds(1);
             _direction = new Vector2(-1, 1);
             yield return new WaitForSeconds(1);
+        }
+    }
+    private void OnEnable()
+    {
+        GameManager.OnAfterStateChanged += HandleGameStateChange;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnAfterStateChanged -= HandleGameStateChange;
+    }
+    private void HandleGameStateChange(GameState state)
+    {
+        if (state == GameState.Starting)
+        {
+            GetComponent<SpriteRenderer>().color = Color.grey;
+        }
+        if(state == GameState.Playing)
+        {
+            GetComponent<SpriteRenderer>().color = Color.magenta;
         }
     }
 }
