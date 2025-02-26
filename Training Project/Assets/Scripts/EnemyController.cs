@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField] private float patrolDelay = 1.5f;
+    [SerializeField] private float patrolSpeed = 3;
+
     private Rigidbody2D _rigidbody;
     private Vector2 _direction = Vector2.right;
+    private Vector2 _patrolTargetPosition;
 
     void Awake()
     {
@@ -35,14 +39,17 @@ public class EnemyController : MonoBehaviour
     //that can yield for time and come back
     IEnumerator PatrolCoroutine()
     {
+        _patrolTargetPosition = new Vector2(1, 2);
+
         //change the direction every second
-        while (true)
-        {
-            _direction = new Vector2(1, -1);
-            yield return new WaitForSeconds(1);
-            _direction = new Vector2(-1, 1);
-            yield return new WaitForSeconds(1);
-        }
+        //while (true)
+        //{
+        //    _direction = new Vector2(1, -1);
+        //    yield return new WaitForSeconds(1);
+        //    _direction = new Vector2(-1, 1);
+        //    yield return new WaitForSeconds(1);
+        //}
+        //yield break;
     }
     private void OnEnable()
     {
