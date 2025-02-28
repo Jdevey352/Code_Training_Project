@@ -35,6 +35,8 @@ public class EnemyController : MonoBehaviour
 
         _rigidbody.velocity = dir.normalized * patrolSpeed;
 
+     
+
         //keep resetting the velocity to the
         //direction * speed even if nudged
         //if (GameManager.Instance.State == GameState.Playing)
@@ -46,7 +48,10 @@ public class EnemyController : MonoBehaviour
         //    _rigidbody.velocity = Vector2.zero;
         //}
     }
-
+    public void AcceptDefeat()
+    {
+        Destroy(gameObject);
+    }
     //IEnumerator return type for coroutine
     //that can yield for time and come back
     IEnumerator PatrolCoroutine()
