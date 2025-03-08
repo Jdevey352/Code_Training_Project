@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallController : MonoBehaviour
+public class HeavyBallController : MonoBehaviour
 {
-    [SerializeField] private float speed = 15f;
-    [SerializeField] private float lifeTime = 3;
-    [SerializeField] private int damage = 5;
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float lifeTime = 1;
+    [SerializeField] private int damage = 10;
     [SerializeField] private string tagToDamage;
 
     public void SetDirection(Vector2 direction)

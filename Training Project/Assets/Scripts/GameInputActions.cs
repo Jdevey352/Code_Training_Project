@@ -62,6 +62,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AltFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""e908f623-5a5d-4467-ad73-01a00962ac14"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -293,6 +302,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eeee382b-6fbb-452a-9dd3-c2163c066f8e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AltFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -884,6 +904,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_AltFire = m_Player.FindAction("AltFire", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -961,6 +982,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_AltFire;
     public struct PlayerActions
     {
         private @GameInputActions m_Wrapper;
@@ -969,6 +991,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @AltFire => m_Wrapper.m_Player_AltFire;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -990,6 +1013,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @AltFire.started += instance.OnAltFire;
+            @AltFire.performed += instance.OnAltFire;
+            @AltFire.canceled += instance.OnAltFire;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1006,6 +1032,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @AltFire.started -= instance.OnAltFire;
+            @AltFire.performed -= instance.OnAltFire;
+            @AltFire.canceled -= instance.OnAltFire;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1192,6 +1221,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnAltFire(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

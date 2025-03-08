@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem; //Don't miss this!
 
@@ -8,9 +9,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     //add this to reference a prefab that is set in the inspector
     public GameObject ballPrefab;
+    public GameObject heavyballPrefab;
 
     //facing direction (even after stopped)
     private Vector2 _facingVector = Vector2.right;
+
+    private bool _isRecoiling = false;
+
+    private Animator _animator;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +33,7 @@ public class PlayerController : MonoBehaviour
         //Invoke(nameof(AcceptDefeat), 10);
     }
 
-    void AcceptDefeat()
+    public void AcceptDefeat()
     {
         Destroy(gameObject);
     }
@@ -58,24 +64,55 @@ public class PlayerController : MonoBehaviour
             ball.GetComponent<BallController>()?.SetDirection(_facingVector);
 
         }
+
+        if (_input.actions["AltFire"].WasPressedThisFrame())
+        {
+            var heavyBall = Instantiate(heavyballPrefab, transform.position, Quaternion.identity);
+
+            heavyBall.GetComponent<Rigidbody2D>().velocity = Vector2.left * 7f;
+
+            heavyBall.GetComponent<HeavyBallController>().SetDirection(_facingVector);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.State != GameState.Playing) return;
+        if (!_isRecoiling)
+        {
+            if (GameManager.Instance.State != GameState.Playing) return;
 
-        //set direction to the Move action's Vector2 value
-        var dir = _input.actions["Move"].ReadValue<Vector2>();
+            //set direction to the Move action's Vector2 value
+            var dir = _input.actions["Move"].ReadValue<Vector2>();
 
-        //change the velocity to match the Move (every physics update)
-        _rigidbody.velocity = dir * 5;
+            //change the velocity to match the Move (every physics update)
+            _rigidbody.velocity = dir * 5;
 
-        //to keep track of facing for aiming when stopped:
-        //Set _facingVector only while controls are moving
-        //(digital only gives 8 directions, analog is nicer)
-        if (dir.magnitude > 0.5) {
-            _facingVector = _rigidbody.velocity;
+            //to keep track of facing for aiming when stopped:
+            //Set _facingVector only while controls are moving
+            //(digital only gives 8 directions, analog is nicer)
+            if (dir.magnitude > 0.5)
+            {
+                _facingVector = _rigidbody.velocity;
+            }
         }
     }
+
+    public void Recoil(Vector2 directionVector)
+    {
+        _rigidbody.AddForce(directionVector, ForceMode2D.Impulse);
+        _isRecoiling = true;
+        Invoke(nameof(StopRecoiling), .3f);
+    }
+
+    private void StopRecoiling()
+    {
+        _isRecoiling = false;
+    }
+    
+    //public void TakeHit()
+    //{
+    //    _animator.Play("PlayerHit");
+    //}
 }
+
 
